@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RealProgActivity"
+    android:orientation="vertical"
+    android:padding="3dp"
+    android:background="@drawable/bg"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="2"
+            >
+            <TableRow>
+                <LinearLayout
+                    android:layout_column="1"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    >
+                    <com.thowo.jmframework.component.JMTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="T.A :"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_column="2"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    >
+                    <com.thowo.jmframework.component.JMTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="2019"
+                        />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/lvListProgReal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+</LinearLayout>

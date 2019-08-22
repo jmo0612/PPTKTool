@@ -17,12 +17,11 @@ public class ListProgActivity extends JMActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_prog,false);
+        setContentView(R.layout.activity_list_prog,R.string.list_prog_title,false);
         init();
     }
 
     private void init(){
-        JmoFunctions.displayTitle("Program");
         ResultView r=JmoFunctions.getCurrentConnection().queryLocal("select * from tb_prog");
         if(r.getResult()!=null){
             List<jmoRowObject> rObjs=r.toList();

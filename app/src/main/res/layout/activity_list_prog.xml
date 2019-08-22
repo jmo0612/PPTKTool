@@ -7,11 +7,27 @@
     android:background="@drawable/bg"
     tools:context=".ListProgActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/headerProg"
+        android:padding="3dp"
+        android:orientation="vertical">
+        <com.thowo.jmframework.component.JMTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTAProg"
+            android:text="T.A"
+            android:textSize="16dp"
+            />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lvListProg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/headerProg"
         android:divider="@color/colorPrimary">
 
     </ListView>

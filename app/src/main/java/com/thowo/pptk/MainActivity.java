@@ -46,7 +46,7 @@ public class MainActivity extends JMActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main,false);
+        setContentView(R.layout.activity_main,R.string.main_title,false);
 
         init();
 
@@ -59,12 +59,12 @@ public class MainActivity extends JMActivity {
     }
 
     private void init(){
-        JmoFunctions.displayTitle("Main Menu");
 
         ContextWrapper c = new ContextWrapper(this);
         Global.CONFIG_PATH= c.getFilesDir().getAbsolutePath() +"/config.ini";
 
-        Global.setDBFile(getDB());
+        Global.setDBFile(Global.getDBFromConfig());
+        Global.setTahun(Global.getTAFromConfig());
 
 
         btnRealMenu=findViewById(R.id.btnRealMenu);
@@ -120,38 +120,6 @@ public class MainActivity extends JMActivity {
 
     }
 
-    private File getDB(){
-        //TextView txtDb= findViewById(R.id.txtDB);
-        File config= new File(Global.CONFIG_PATH);
-        trace(config.getAbsoluteFile());
-        if(!fileExist(config)){
-            if(!createFile(config)){
-                Toast.makeText(getApplicationContext(),"Error creating config file",Toast.LENGTH_LONG).show();
-                return null;
-            }
-            //return null;
-        }else{
-            trace("so ada");
-        }
-
-
-        String curDB=readTxtFile(config,"DB");
-        trace("CURDB: "+curDB);
-        if(curDB.equals("")){
-            return null;
-        }
-        File db=new File(curDB);
-        if(!fileExist(db)) return null;
-
-        //txtDb.setText(db.getName());
-        //Button btnMsk=findViewById(R.id.btnMasuk);
-        //btnMsk.setEnabled(true);
-
-
-
-        return db;
-    }
-
 
 
     private void validateDB(){
@@ -159,7 +127,7 @@ public class MainActivity extends JMActivity {
         ResultView r=getCurrentConnection(new jmoConnection(Global.getDBFile())).queryLocal("select * from tb_prog");
         if(r==null)return;
         if(r.getResult()==null){
-            toast("Database tidak benar");
+            toast(R.string.msg_invalid_database);
             return;
         }
 

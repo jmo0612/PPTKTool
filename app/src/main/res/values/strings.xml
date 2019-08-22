@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">PPTK</string>
+
+    <string name="main_title">Menu Utama</string>
+    <string name="list_prog_title">Program</string>
+    <string name="primary_title">Tes</string>
+    <string name="setting_title">Pengaturan</string>
+
+    <string name="msg_no_database">Database tidak ada</string>
+    <string name="msg_invalid_database">Database tidak benar</string>
+    <string name="msg_config_saved">Data Pengaturan Tersimpan</string>
+    <string name="err_create_config_file_msg">Gagal membuat file konfigurasi</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.thowo.pptk;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -35,7 +38,7 @@ public class SettingActivity extends JMActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting,false);
+        setContentView(R.layout.activity_setting,R.string.setting_title,false);
 
         init();
     }
@@ -51,7 +54,6 @@ public class SettingActivity extends JMActivity{
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId()==R.id.menuItemOKSetting){
             setConfig(dbFileSelected);
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -61,12 +63,22 @@ public class SettingActivity extends JMActivity{
         init();
     }
 
+    @Override
+    public void finish(){
+        if(myMenu.findItem(R.id.menuItemOKSetting).isVisible()){
+            super.confirmExit("Exit?");
+            return;
+        }
+        super.finish();
+    }
+
+
+
 
     private void init(){
-        JmoFunctions.displayTitle("Pengaturan");
 
         JMEditText edtTA=findViewById(R.id.edtTASet);
-        edtTA.setText(String.valueOf(getTA()));
+        edtTA.setText(String.valueOf(Global.getTahun()));
 
         edtTA.addTextChangedListener(new TextWatcher() {
             @Override
@@ -76,8 +88,7 @@ public class SettingActivity extends JMActivity{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(myMenu==null)return;
-                myMenu.findItem(R.id.menuItemOKSetting).setVisible(getTA()!=Integer.parseInt(String.valueOf(s)));
+                setChanges(String.valueOf(s));
             }
 
             @Override
@@ -102,7 +113,6 @@ public class SettingActivity extends JMActivity{
                 new JMFilePicker(me, "db", new JMFilePickerListener() {
                     @Override
                     public void onPicked(File chosen) {
-                        Global.setDBFile(chosen);
                         edtDB.setText(chosen.getName());
                         setChosen(chosen);
                     }
@@ -118,51 +128,35 @@ public class SettingActivity extends JMActivity{
 
     private void setChosen(File db){
         dbFileSelected=db;
-        if(myMenu==null)return;
-        myMenu.findItem(R.id.menuItemOKSetting).setVisible(!Global.getDBFile().getAbsoluteFile().equals(dbFileSelected.getAbsolutePath()));
+        JMEditText edtTA=findViewById(R.id.edtTASet);
+        setChanges(String.valueOf(edtTA.getText()));
     }
 
     private void setConfig(File db){
         if(db==null){
-            toast("Database tidak ada");
+            toast(R.string.msg_no_database);
             return;
         }
         JMEditText edtTA=findViewById(R.id.edtTASet);
         writeTxtFile(Global.CONFIG_PATH,"DB",db.getAbsolutePath());
         writeTxtFile(Global.CONFIG_PATH,"TA", String.valueOf(edtTA.getText()));
         trace(db.getAbsoluteFile());
+
+        Global.setDBFile(dbFileSelected);
+        Global.setTahun(Integer.parseInt(String.valueOf(edtTA.getText())));
+        setChanges(String.valueOf(edtTA.getText()));
+        toast(R.string.msg_config_saved);
     }
 
-    private int getTA(){
-        //TextView txtDb= findViewById(R.id.txtDB);
-        File config= new File(Global.CONFIG_PATH);
-        trace(config.getAbsoluteFile());
-        if(!fileExist(config)){
-            if(!createFile(config)){
-                Toast.makeText(getApplicationContext(),"Error creating config file",Toast.LENGTH_LONG).show();
-                return 0;
-            }
-            //return null;
-        }else{
-            trace("so ada");
-        }
-
-
-        String curTA=readTxtFile(config,"TA");
-        trace("CURTA: "+curTA);
-        int ta=0;
-        if(!curTA.equals("")){
-            ta= Integer.parseInt(curTA);
-        }
-
-        if(ta<=0){
-            ta= (int) JmoFunctions.now(Calendar.YEAR);
-        }
-
-        if(ta<=0)return 0;
-
-
-        return ta;
+    private void setChanges(String taInput){
+        if(myMenu==null)return;
+        String curDBStr="";
+        if(Global.getDBFile()!=null)curDBStr=Global.getDBFile().getAbsolutePath();
+        String myDBStr="";
+        if(dbFileSelected!=null)myDBStr=dbFileSelected.getAbsolutePath();
+        myMenu.findItem(R.id.menuItemOKSetting).setVisible(!((Global.getTahun()==Integer.parseInt(String.valueOf(taInput))) && (curDBStr.equals(myDBStr))));
+        JmoFunctions.trace("curDBStr = "+ curDBStr);
+        JmoFunctions.trace("myDBStr = "+ myDBStr);
     }
 
 }
